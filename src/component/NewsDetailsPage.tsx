@@ -48,10 +48,10 @@ const NewsDetailsPage: React.FC = () => {
       <h1 className="text-3xl font-bold mb-4">{article.title}</h1>
 
       {article.image && (
-        <img src={article.image} alt={article.title} className="w-full h-96 object-cover rounded mb-4" />
+        <img src={article.image} alt={article.title} className="w-full h-[5/12] md:h-[560px]  rounded mb-4" />
       )}
 
-      <p className="text-gray-600 mb-2">{article.publishedAt}</p>
+      <p className="text-gray-600 mb-2 font-bold">{article.publishedAt}</p>
       <p className="text-gray-800 mb-4">{article.description}</p>
       <p className="text-gray-800 mb-4">{article.content}</p>
 
