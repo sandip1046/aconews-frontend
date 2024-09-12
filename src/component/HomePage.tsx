@@ -1,10 +1,7 @@
-//src/component/HomePage.tsx
-
 import React, { useState, useEffect } from 'react';
-
 import { Link } from 'react-router-dom';
 import { fetchNews } from '../services/newServices';
-
+import { IoIosArrowDropdown } from 'react-icons/io';
 
 interface NewsArticle {
   title: string;
@@ -31,9 +28,8 @@ const HomePage: React.FC = () => {
       try {
         const data = await fetchNews(query, page);
         setNews(data.articles);
-        setTotalPages(Math.ceil(data.totalArticles / 10)); // Assuming 10 articles per page
-      } catch (error) {
-        console.error('Error fetching news:', error);
+        setTotalPages(Math.ceil(data.totalArticles / 10)); 
+        console.error('Error fetching news:', Error);
       } finally {
         setLoading(false);
       }
@@ -48,28 +44,44 @@ const HomePage: React.FC = () => {
     setQuery(query);
   };
 
+  // Dropdown content
+  const categories = ["Sports", "Politics", "Regional", "National", "International", "Education", "Science", "Innovation", "Finance", "Health"];
+
   return (
     <div className="container mx-auto p-4">
-     
+      {/* Search and Category Form */}
+      <div className={`flex flex-col md:flex-row justify-between mb-6`}>
+        <div className="relative group">
+          <button className="bg-gray-100 flex items-center justify-center gap-3 px-5 py-2 font-bold text-[20px] rounded-t w-[50%] md:w-[100%] cursor-default ">
+            Category
+            <IoIosArrowDropdown size={25}/>
+          </button>
+          <div className="absolute hidden group-hover:block bg-white shadow-lg rounded-b">
+            {categories.map((category, index) => (
+              <a key={index} href={`#${category}`} className="block px-4 py-2 w-[100%] text-sm text-gray-900 hover:bg-gray-200">
+                {category}
+              </a>
+            ))}
+          </div>
+        </div>
 
-      {/* Search Form */}
-      <form onSubmit={handleSearch} className="flex justify-end mb-6">
-        <input
-          type="text"
-          placeholder="Search news..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="border p-2 w-[20%] rounded"
-        />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-2 ml-2 rounded hover:bg-blue-300 hover:text-black">
-          Search
-        </button>
-      </form>
+        <form onSubmit={handleSearch} className="flex justify-end">
+          <input
+            type="text"
+            placeholder="Search news..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="border p-2 w-[100%] rounded"
+          />
+          <button type="submit" className="bg-blue-500 text-white px-4 py-2 ml-2 rounded hover:bg-blue-400 hover:text-black">
+            Search
+          </button>
+        </form>
+      </div>
 
       {/* News List */}
       {loading ? (
         <p className="text-center">Loading news...</p>
-    
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
           {news.map((article, index) => (
